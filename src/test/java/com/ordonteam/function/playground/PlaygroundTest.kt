@@ -1,5 +1,6 @@
 package com.ordonteam.function.playground
 
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
@@ -21,6 +22,10 @@ class PlaygroundTest {
     val TWO = NEXT.call(ONE)
     val ZERO_TO_ONE_PAIR = F { x -> x.call(ZERO).call(ONE) }
     val PAIR_CREATOR = F { a -> F { b -> F { x -> x.call(a).call(b) } } }
+    val EMPTY_LIST = object : F {
+        override fun call(x: F) = x.call(this).call(this)
+    }
+    val APPEND_LIST = F { list -> F { element -> PAIR_CREATOR.call(element).call(list) } }
 
     @Test
     fun shouldReturnPassedParam() {
@@ -108,15 +113,14 @@ class PlaygroundTest {
     }
 
     @Test
-    fun shouldRepresentRequestedList() {
-//        val first = TWO
-//        val second = ZERO
-//        val third = ONE
-//
-//        val LIST = null// LIST_APPEND.
-//
-//        assertFunctionRepresent(2, LIST.call(TRUE))
-//        assertFunctionRepresent(0, LIST.call(FALSE).call(TRUE))
-//        assertFunctionRepresent(1, LIST.call(FALSE).call(FALSE).call(TRUE))
+    fun shouldRepresentEmptyList() {
+        assertEquals(EMPTY_LIST, EMPTY_LIST.call(TRUE))
+        assertEquals(EMPTY_LIST, EMPTY_LIST.call(FALSE))
+    }
+
+    @Test
+    fun shouldAppendToList() {
+        assertFunctionRepresent(2, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(TRUE))
+        assertEquals(EMPTY_LIST, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(FALSE))
     }
 }
