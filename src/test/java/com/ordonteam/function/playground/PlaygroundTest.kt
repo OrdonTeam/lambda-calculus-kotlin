@@ -19,7 +19,7 @@ class PlaygroundTest {
     val ZERO = F { x -> x }
     val ONE = F { x -> x.call(x) }
     val NEXT = F { x -> F { y -> x.call(y.call(y)) } }
-    val PREVIOUS = F { number -> F { x -> number.call(F { ignoreInvocation -> x }) } }
+    val PREVIOUS = F { number -> F { counter -> number.call(F { ignoreInvocation -> counter }) } }
     val TWO = NEXT.call(ONE)
     val ZERO_TO_ONE_PAIR = F { x -> x.call(ZERO).call(ONE) }
     val PAIR_CREATOR = F { a -> F { b -> F { x -> x.call(a).call(b) } } }
@@ -131,4 +131,5 @@ class PlaygroundTest {
         assertSameNumber(ONE, PREVIOUS.call(TWO))
         assertSameNumber(ZERO, PREVIOUS.call(PREVIOUS.call(TWO)))
     }
+
 }
