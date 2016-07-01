@@ -132,4 +132,12 @@ class PlaygroundTest {
         assertSameNumber(ZERO, PREVIOUS.call(PREVIOUS.call(TWO)))
     }
 
+    @Test
+    fun shouldDiscoverZeroFromPositiveNumbers() {
+        val IS_ZERO = F { number -> number.call(PAIR_CREATOR.call(TRUE).call(FALSE)).call(TRUE) }
+        assertBehaveLikeTrue(IS_ZERO.call(ZERO))
+        assertBehaveLikeFalse(IS_ZERO.call(ONE))
+        assertBehaveLikeFalse(IS_ZERO.call(TWO))
+//        assertBehaveLikeFalse(IS_ZERO.call(PREVIOUS.call(ZERO)))
+    }
 }

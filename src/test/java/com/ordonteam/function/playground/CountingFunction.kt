@@ -1,6 +1,6 @@
 package com.ordonteam.function.playground
 
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 
 data class CountingFunction(val count: Int) : F {
 
@@ -8,9 +8,19 @@ data class CountingFunction(val count: Int) : F {
 }
 
 fun assertSameNumber(expectedNumber: F, actualNumber: F) {
-    Assert.assertEquals(expectedNumber.call(CountingFunction(0)), actualNumber.call(CountingFunction(0)))
+    assertEquals(expectedNumber.call(CountingFunction(0)), actualNumber.call(CountingFunction(0)))
 }
 
 fun assertFunctionRepresent(value: Int, number: F) {
-    Assert.assertEquals(CountingFunction(value), number.call(CountingFunction(0)))
+    assertEquals(CountingFunction(value), number.call(CountingFunction(0)))
+}
+
+fun assertBehaveLikeTrue(hopefullyTrue: F) {
+    val expected = F { x -> x }
+    assertEquals("It is not true", expected, hopefullyTrue.call(expected).call({ x -> expected }))
+}
+
+fun assertBehaveLikeFalse(hopefullyTrue: F) {
+    val expected = F { x -> x }
+    assertEquals("It is not false", expected, hopefullyTrue.call({ x -> expected }).call(expected))
 }
