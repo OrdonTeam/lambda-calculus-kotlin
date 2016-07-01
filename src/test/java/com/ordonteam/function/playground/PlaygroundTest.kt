@@ -16,11 +16,11 @@ class PlaygroundTest {
     val OR = F { x -> F { y -> x.call(TRUE).call(y) } }
     val AND = F { x -> F { y -> x.call(y).call(FALSE) } }
 
-    val ZERO = F { x -> x }
-    val ONE = F { x -> x.call(x) }
-    val NEXT = F { x -> F { y -> x.call(y.call(y)) } }
+    val ZERO = F { f -> F { x -> x } }
+    val ONE = F { f -> F { x -> f.call(x) } }
+    val TWO = F { f -> F { x -> f.call(f.call(x)) } }
+    val NEXT = F { number -> F { f -> F { x -> f.call(number.call(x)) } } }
     val PREVIOUS = F { number -> F { counter -> number.call(F { ignoreInvocation -> counter }) } }
-    val TWO = NEXT.call(ONE)
     val ZERO_TO_ONE_PAIR = F { x -> x.call(ZERO).call(ONE) }
     val PAIR_CREATOR = F { a -> F { b -> F { x -> x.call(a).call(b) } } }
     val EMPTY_LIST = object : F {
@@ -89,6 +89,11 @@ class PlaygroundTest {
     }
 
     @Test
+    fun shouldRepresent2() {
+        assertFunctionRepresent(2, TWO)
+    }
+
+    @Test
     fun shouldRepresentNextValue() {
         assertFunctionRepresent(1, NEXT.call(ZERO))
         assertFunctionRepresent(2, NEXT.call(NEXT.call(ZERO)))
@@ -129,9 +134,9 @@ class PlaygroundTest {
 
     @Test
     fun shouldRepresentPreviousNumber() {
-        assertSameNumber(ZERO, PREVIOUS.call(ONE))
-        assertSameNumber(ONE, PREVIOUS.call(TWO))
-        assertSameNumber(ZERO, PREVIOUS.call(PREVIOUS.call(TWO)))
+        assertFunctionRepresent(0, PREVIOUS.call(ONE))
+        assertFunctionRepresent(1, PREVIOUS.call(TWO))
+        assertFunctionRepresent(0, PREVIOUS.call(PREVIOUS.call(TWO)))
     }
 
     @Test
