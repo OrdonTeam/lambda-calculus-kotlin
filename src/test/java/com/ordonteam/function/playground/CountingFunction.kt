@@ -20,7 +20,7 @@ fun assertBehaveLikeTrue(hopefullyTrue: F) {
     assertEquals("It is not true", expected, hopefullyTrue.call(expected).call({ x -> expected }))
 }
 
-fun assertBehaveLikeFalse(hopefullyTrue: F) {
+fun assertBehaveLikeFalse(hopefullyTrue: F, message: String = "It is not false") {
     val expected = F { x -> x }
-    assertEquals("It is not false", expected, hopefullyTrue.call({ x -> expected }).call(expected))
+    assertEquals(message, expected, hopefullyTrue.call({ x -> expected }).call(expected))
 }
