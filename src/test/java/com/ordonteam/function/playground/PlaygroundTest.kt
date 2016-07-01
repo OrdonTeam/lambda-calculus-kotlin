@@ -27,8 +27,7 @@ class PlaygroundTest {
         override fun call(x: F) = this
     }
     val APPEND_LIST = F { list -> F { element -> PAIR_CREATOR.call(element).call(list) } }
-    val IS_LESS_OR_EQUAL_ZERO = F { number -> number.call(PAIR_CREATOR.call(TRUE).call(FALSE)).call(TRUE) }
-    val IS_ZERO = F { number -> AND.call(IS_LESS_OR_EQUAL_ZERO.call(number)).call(IS_LESS_OR_EQUAL_ZERO.call(number)) }
+    val IS_ZERO = F { n -> n.call(FALSE).call(TRUE) }
 
     @Test
     fun shouldReturnPassedParam() {
@@ -139,17 +138,10 @@ class PlaygroundTest {
         assertFunctionRepresent(0, PREVIOUS.call(PREVIOUS.call(TWO)))
     }
 
-//    @Test
-//    fun shouldDiscoverZeroFromPositiveNumbers() {
-//        assertBehaveLikeTrue(IS_LESS_OR_EQUAL_ZERO.call(ZERO))
-//        assertBehaveLikeFalse(IS_LESS_OR_EQUAL_ZERO.call(ONE))
-//        assertBehaveLikeFalse(IS_LESS_OR_EQUAL_ZERO.call(TWO))
-//    }
-//
-//    @Test
-//    fun shouldDiscoverZeroFromNegativeNumbers() {
-//        assertEquals("Should be true for zero", TRUE, IS_ZERO.call(ZERO))
-//        assertBehaveLikeFalse(IS_ZERO.call(PREVIOUS.call(ZERO)), "Should be false for negative one")
-//        assertBehaveLikeFalse(IS_ZERO.call(PREVIOUS.call(PREVIOUS.call(ZERO))), "Should be false for negative two")
-//    }
+    @Test
+    fun shouldRepresentIsZero() {
+        assertBehaveLikeTrue(IS_ZERO.call(ZERO))
+        assertBehaveLikeFalse(IS_ZERO.call(ONE))
+        assertBehaveLikeFalse(IS_ZERO.call(TWO))
+    }
 }
