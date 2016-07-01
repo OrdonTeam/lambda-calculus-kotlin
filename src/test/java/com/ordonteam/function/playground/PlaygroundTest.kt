@@ -29,6 +29,16 @@ class PlaygroundTest {
     val APPEND_LIST = F { list -> F { element -> PAIR_CREATOR.call(element).call(list) } }
     val IS_ZERO = F { n -> n.call(FALSE).call(TRUE) }
     val ADD = F { a -> F { b -> F { f -> F { x -> b.call(f).call(a.call(f).call(x)) } } } }
+    val MULTIPLY = F { a -> F { b -> F { f -> F { x -> b.call(F { xx -> a.call(f).call(xx) }).call(x) } } } }
+
+    @Test
+    fun shouldMultiply() {
+        assertFunctionRepresent(0, MULTIPLY.call(ZERO).call(ZERO))
+        assertFunctionRepresent(0, MULTIPLY.call(ZERO).call(ONE))
+        assertFunctionRepresent(0, MULTIPLY.call(ONE).call(ZERO))
+        assertFunctionRepresent(1, MULTIPLY.call(ONE).call(ONE))
+        assertFunctionRepresent(4, MULTIPLY.call(TWO).call(TWO))
+    }
 
     @Test
     fun shouldAddTwoNumbers() {
