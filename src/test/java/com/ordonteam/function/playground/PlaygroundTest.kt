@@ -19,11 +19,12 @@ class PlaygroundTest {
     val ZERO = F { x -> x }
     val ONE = F { x -> x.call(x) }
     val NEXT = F { x -> F { y -> x.call(y.call(y)) } }
+    val PREVIOUS = F { number -> F { x -> number.call(F { ignoreInvocation -> x }) } }
     val TWO = NEXT.call(ONE)
     val ZERO_TO_ONE_PAIR = F { x -> x.call(ZERO).call(ONE) }
     val PAIR_CREATOR = F { a -> F { b -> F { x -> x.call(a).call(b) } } }
     val EMPTY_LIST = object : F {
-        override fun call(x: F) = x.call(this).call(this)
+        override fun call(x: F) = this
     }
     val APPEND_LIST = F { list -> F { element -> PAIR_CREATOR.call(element).call(list) } }
 
@@ -122,5 +123,12 @@ class PlaygroundTest {
     fun shouldAppendToList() {
         assertFunctionRepresent(2, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(TRUE))
         assertEquals(EMPTY_LIST, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(FALSE))
+    }
+
+    @Test
+    fun shouldRepresentPreviousNumber() {
+        assertSameNumber(ZERO, PREVIOUS.call(ONE))
+        assertSameNumber(ONE, PREVIOUS.call(TWO))
+        assertSameNumber(ZERO, PREVIOUS.call(PREVIOUS.call(TWO)))
     }
 }
