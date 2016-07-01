@@ -2,17 +2,22 @@ package com.ordonteam.function.playground
 
 import org.junit.Assert.assertEquals
 
-data class CountingFunction(val count: Int) : F {
-
-    override fun call(f: F?) = CountingFunction(count + 1)
+data class Count(val count: Int) : F {
+    override fun call(f: F) = throw RuntimeException()
 }
 
-val callParameterWithAnyFunction = F { x -> x.call(anyFunction) }
-
-val anyFunction = F { x -> x }
+class Counter : F {
+    override fun call(count: F): F {
+        return if (count is Count) {
+            Count(count.count + 1)
+        } else {
+            throw RuntimeException()
+        }
+    }
+}
 
 fun assertFunctionRepresent(value: Int, number: F) {
-    assertEquals(CountingFunction(value), number.call(callParameterWithAnyFunction).call(CountingFunction(0)))
+    assertEquals(Count(value), number.call(Counter()).call(Count(0)))
 }
 
 fun assertBehaveLikeTrue(hopefullyTrue: F) {
