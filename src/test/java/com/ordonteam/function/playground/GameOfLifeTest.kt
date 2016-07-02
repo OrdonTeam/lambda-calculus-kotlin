@@ -1,36 +1,9 @@
 package com.ordonteam.function.playground
 
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
 
 class GameOfLifeTest {
-
-    val NEIGHBOURS_COUNT = F { world ->
-        F { x ->
-            F { y ->
-                val topLeft = IF.call(world.call(PREVIOUS.call(x)).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
-                val topMiddle = IF.call(world.call(PREVIOUS.call(x)).call(y)).call(ONE).call(ZERO)
-                val topRight = IF.call(world.call(PREVIOUS.call(x)).call(NEXT.call(y))).call(ONE).call(ZERO)
-                val middleLeft = IF.call(world.call(x).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
-                val middleRight = IF.call(world.call(x).call(NEXT.call(y))).call(ONE).call(ZERO)
-                val bottomLeft = IF.call(world.call(NEXT.call(x)).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
-                val bottomMiddle = IF.call(world.call(NEXT.call(x)).call(y)).call(ONE).call(ZERO)
-                val bottomRight = IF.call(world.call(NEXT.call(x)).call(NEXT.call(y))).call(ONE).call(ZERO)
-                val count = ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(topLeft).call(topMiddle)).call(topRight)).call(middleLeft)).call(middleRight)).call(bottomLeft)).call(bottomMiddle)).call(bottomRight)
-                println(count.asNumber())
-                count
-            }
-        }
-    }
-    val GAME_OF_LIFT_TICK = F { world ->
-        F { x ->
-            F { y ->
-                val livingNeighbours = NEIGHBOURS_COUNT.call(world).call(x).call(y)
-                OR.call(EQ.call(livingNeighbours).call(TWO)).call(EQ.call(livingNeighbours).call(THREE))
-            }
-        }
-    }
 
     @Test
     fun shouldReturnEmptyWorld() {
@@ -42,6 +15,13 @@ class GameOfLifeTest {
     @Test
     fun singleCellShouldDie() {
         val world = worldOf(5 to 5)
+        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        newWorld.assertCellDead(5, 5)
+    }
+
+    @Test
+    fun cellShouldNotEmergeWithOnlyTwoFriends() {
+        val world = worldOf(4 to 4, 4 to 5)
         val newWorld = GAME_OF_LIFT_TICK.call(world)
         newWorld.assertCellDead(5, 5)
     }
