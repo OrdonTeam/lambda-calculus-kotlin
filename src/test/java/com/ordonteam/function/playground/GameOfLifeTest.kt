@@ -59,6 +59,14 @@ class GameOfLifeTest {
         newWorld.assertCellAlive(5, 5)
     }
 
+    @Test
+    @Ignore("To big")
+    fun onceShouldDieWhenNotEnoughFriends() {
+        val world = worldOf(4 to 4, 5 to 5)
+        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        newWorld.assertCellDead(5, 5)
+    }
+
     private fun worldOf(vararg lives: Pair<Int, Int>): F {
         return F { x -> F { y -> lives.contains(x.asNumber() to y.asNumber()).asFunction() } }
     }
