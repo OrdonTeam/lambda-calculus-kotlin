@@ -6,20 +6,20 @@ import org.junit.Test
 class ListTest {
     @Test
     fun shouldRepresentNotANumberAndNotATuple() {
-        assertBehaveLikeTrue(IS_NAN.call(NAN))
-        assertBehaveLikeFalse(IS_NAN.call(ONE))
-        assertBehaveLikeFalse(IS_NAN.call(PAIR_CREATOR.call(ONE).call(ONE)))
+        assertBehaveLikeTrue(IS_EMPTY_LIST.call(EMPTY_LIST))
+        assertBehaveLikeFalse(IS_EMPTY_LIST.call(ONE))
+        assertBehaveLikeFalse(IS_EMPTY_LIST.call(PAIR.call(ONE).call(ONE)))
     }
 
     @Test
     fun shouldRepresentRequestedPair() {
-        assertFunctionRepresent(1, PAIR_CREATOR.call(ONE).call(ZERO).call(TRUE))
-        assertFunctionRepresent(1, PAIR_CREATOR.call(ZERO).call(ONE).call(FALSE))
+        assertFunctionRepresent(1, PAIR.call(ONE).call(ZERO).call(TRUE))
+        assertFunctionRepresent(1, PAIR.call(ZERO).call(ONE).call(FALSE))
     }
 
     @Test
     fun shouldRepresentList_0_1_2() {
-        val LIST = PAIR_CREATOR.call(ONE).call(PAIR_CREATOR.call(ZERO).call(TRUE.call(TWO)))
+        val LIST = PAIR.call(ONE).call(PAIR.call(ZERO).call(TRUE.call(TWO)))
 
         assertFunctionRepresent(1, LIST.call(TRUE))
         assertFunctionRepresent(0, LIST.call(FALSE).call(TRUE))
