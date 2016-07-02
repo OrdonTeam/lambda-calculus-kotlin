@@ -32,4 +32,16 @@ class ListTest {
         assertFunctionRepresent(2, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(HEAD))
         assertEquals(EMPTY_LIST, APPEND_LIST.call(EMPTY_LIST).call(TWO).call(TAIL))
     }
+
+//    @Test
+//    fun shouldCalculateListSize() {
+//        val SIZE = F { list ->
+//            val SIZE_TO_BUILD = F { self -> F { list -> F { size -> IF.call(IS_EMPTY_LIST.call(list)).call(IDENTITY).call(F { size -> self.call(self).call(list.call(TAIL)).call(NEXT.call(size)) }).call(size) } } }
+//            val SIZE_INTERNAL = RECURSION_BUILDER.call(SIZE_TO_BUILD)
+//            SIZE_INTERNAL.call(list).call(ZERO)
+//        }
+//        assertFunctionRepresent(0, SIZE.call(EMPTY_LIST))
+//        assertFunctionRepresent(1, SIZE.call(APPEND_LIST.call(EMPTY_LIST).call(ONE)))
+//        assertFunctionRepresent(2, SIZE.call(APPEND_LIST.call(APPEND_LIST.call(EMPTY_LIST).call(ONE)).call(ONE)))
+//    }
 }
