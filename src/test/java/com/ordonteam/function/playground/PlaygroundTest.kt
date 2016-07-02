@@ -40,10 +40,10 @@ class PlaygroundTest {
     val IS_NAN = F { p -> p.call(FALSE) }
 
     @Test
-    fun shouldRepresentNotANumber() {
+    fun shouldRepresentNotANumberAndNotATuple() {
         assertBehaveLikeTrue(IS_NAN.call(NAN))
         assertBehaveLikeFalse(IS_NAN.call(ONE))
-        assertBehaveLikeFalse(IS_NAN.call(NEXT.call(ONE)))
+        assertBehaveLikeFalse(IS_NAN.call(PAIR_CREATOR.call(ONE).call(ONE)))
     }
 
     @Test
