@@ -8,6 +8,8 @@ val NEXT = F { n -> F { f -> F { x -> n.call(f).call(f.call(x)) } } }
 
 val TWO = F { f -> F { x -> f.call(f.call(x)) } }
 
+val THREE = NEXT.call(TWO)
+
 val PREVIOUS = F { n -> F { f -> F { x -> n.call(F { g -> F { h -> h.call(g.call(f)) } }).call(F { u -> x }).call(F { u -> u }) } } }
 
 val ADD = F { a -> F { b -> F { f -> F { x -> b.call(f).call(a.call(f).call(x)) } } } }

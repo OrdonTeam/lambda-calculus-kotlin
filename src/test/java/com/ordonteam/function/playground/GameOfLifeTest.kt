@@ -23,7 +23,14 @@ class GameOfLifeTest {
             }
         }
     }
-    val GAME_OF_LIFT_TICK = F { world -> F { x -> F { y -> NOT.call(IS_ZERO.call(NEIGHBOURS_COUNT.call(world).call(x).call(y))) } } }
+    val GAME_OF_LIFT_TICK = F { world ->
+        F { x ->
+            F { y ->
+                val livingNeighbours = NEIGHBOURS_COUNT.call(world).call(x).call(y)
+                OR.call(EQ.call(livingNeighbours).call(TWO)).call(EQ.call(livingNeighbours).call(THREE))
+            }
+        }
+    }
 
     @Test
     fun shouldReturnEmptyWorld() {
@@ -60,7 +67,6 @@ class GameOfLifeTest {
     }
 
     @Test
-    @Ignore("To big")
     fun onceShouldDieWhenNotEnoughFriends() {
         val world = worldOf(4 to 4, 5 to 5)
         val newWorld = GAME_OF_LIFT_TICK.call(world)
