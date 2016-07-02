@@ -1,43 +1,12 @@
 package com.ordonteam.function.playground
 
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
 class PlaygroundTest {
 
-    val identity = F { x -> x }
     val other = F { x -> x }
-    val TRUE = F { x -> F { y -> x } }
-    val FALSE = F { x -> F { y -> y } }
-    val NOT = F { x -> x.call(FALSE).call(TRUE) }
-    val IF = F { x -> F { y -> F { z -> x.call(y).call(z) } } }
-    val OR = F { x -> F { y -> x.call(TRUE).call(y) } }
-    val AND = F { x -> F { y -> x.call(y).call(FALSE) } }
-
-    val ZERO = F { f -> F { x -> x } }
-    val ONE = F { f -> F { x -> f.call(x) } }
-    val TWO = F { f -> F { x -> f.call(f.call(x)) } }
-    val NEXT = F { n -> F { f -> F { x -> n.call(f).call(f.call(x)) } } }
-    val PREVIOUS = F { n -> F { f -> F { x -> n.call(F { g -> F { h -> h.call(g.call(f)) } }).call(F { u -> x }).call(F { u -> u }) } } }
-    val ZERO_TO_ONE_PAIR = F { x -> x.call(ZERO).call(ONE) }
-    val PAIR_CREATOR = F { a -> F { b -> F { x -> x.call(a).call(b) } } }
-    val EMPTY_LIST = object : F {
-        override fun call(x: F) = this
-    }
-    val APPEND_LIST = F { list -> F { element -> PAIR_CREATOR.call(element).call(list) } }
-    val IS_ZERO = F { n -> n.call(FALSE).call(TRUE) }
-    val ADD = F { a -> F { b -> F { f -> F { x -> b.call(f).call(a.call(f).call(x)) } } } }
-    val MULTIPLY = F { a -> F { b -> F { f -> F { x -> b.call(F { xx -> a.call(f).call(xx) }).call(x) } } } }
-    val RECURSION_BUILDER = F { f -> F { a -> f.call(f).call(a) } }
-    val FACTORIAL = F { a ->
-        val FACTORIAL_TO_BUILD = F { self -> F { a -> F { acc -> IF.call(IS_ZERO.call(a)).call(identity).call(F { acc2 -> self.call(self).call(PREVIOUS.call(a)).call(MULTIPLY.call(a).call(acc2)) }).call(acc) } } }
-        val FACTORIAL_INTERNAL = RECURSION_BUILDER.call(FACTORIAL_TO_BUILD)
-        FACTORIAL_INTERNAL.call(a).call(ONE)
-    }
-    val NAN = F { x -> TRUE }
-    val IS_NAN = F { p -> p.call(FALSE) }
 
     @Test
     fun shouldRepresentNotANumberAndNotATuple() {
@@ -74,22 +43,22 @@ class PlaygroundTest {
 
     @Test
     fun shouldReturnPassedParam() {
-        assertEquals(identity, identity.call(identity))
+        assertEquals(IDENTITY, IDENTITY.call(IDENTITY))
     }
 
     @Test
     fun shouldDifferentFunctionExists() {
-        assertNotEquals(identity, other)
+        assertNotEquals(IDENTITY, other)
     }
 
     @Test
     fun shouldReturnFirstParam() {
-        assertEquals(identity, TRUE.call(identity).call(other))
+        assertEquals(IDENTITY, TRUE.call(IDENTITY).call(other))
     }
 
     @Test
     fun shouldReturnSecondParam() {
-        assertEquals(identity, FALSE.call(other).call(identity))
+        assertEquals(IDENTITY, FALSE.call(other).call(IDENTITY))
     }
 
     @Test
@@ -100,8 +69,8 @@ class PlaygroundTest {
 
     @Test
     fun shouldBehaveLikeIf() {
-        assertEquals(identity, IF.call(TRUE).call(identity).call(other))
-        assertEquals(identity, IF.call(FALSE).call(other).call(identity))
+        assertEquals(IDENTITY, IF.call(TRUE).call(IDENTITY).call(other))
+        assertEquals(IDENTITY, IF.call(FALSE).call(other).call(IDENTITY))
     }
 
     @Test
@@ -139,12 +108,6 @@ class PlaygroundTest {
     fun shouldRepresentNextValue() {
         assertFunctionRepresent(1, NEXT.call(ZERO))
         assertFunctionRepresent(2, NEXT.call(NEXT.call(ZERO)))
-    }
-
-    @Test
-    fun shouldRepresentZeroToOneTuple() {
-        assertFunctionRepresent(0, ZERO_TO_ONE_PAIR.call(TRUE))
-        assertFunctionRepresent(1, ZERO_TO_ONE_PAIR.call(FALSE))
     }
 
     @Test
