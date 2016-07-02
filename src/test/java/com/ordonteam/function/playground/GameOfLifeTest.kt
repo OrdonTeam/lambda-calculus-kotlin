@@ -6,7 +6,15 @@ import org.junit.Test
 
 class GameOfLifeTest {
 
-    val NEIGHBOURS_COUNT = F { world -> F { x -> F { y -> IF.call(world.call(PREVIOUS.call(x)).call(PREVIOUS.call(x))).call(ONE).call(ZERO) } } }
+    val NEIGHBOURS_COUNT = F { world ->
+        F { x ->
+            F { y ->
+                val topLeft = IF.call(world.call(PREVIOUS.call(x)).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
+                val topMiddle = IF.call(world.call(PREVIOUS.call(x)).call(y)).call(ONE).call(ZERO)
+                ADD.call(topLeft).call(topMiddle)
+            }
+        }
+    }
     val GAME_OF_LIFT_TICK = F { world -> F { x -> F { y -> FALSE } } }
 
     @Test
@@ -25,8 +33,9 @@ class GameOfLifeTest {
 
     @Test
     fun shouldReturnNeighboursCount() {
-        assertNeighboursCountOn_5_5(0, worldOf())
-        assertNeighboursCountOn_5_5(1, worldOf(4 to 4))
+        assertNeighboursCountOn_5_6(0, worldOf())
+        assertNeighboursCountOn_5_6(1, worldOf(4 to 5))
+        assertNeighboursCountOn_5_6(1, worldOf(4 to 6))
     }
 
     @Test
@@ -49,7 +58,7 @@ class GameOfLifeTest {
         assertBehaveLikeTrue(this.call(x.asFunction()).call(y.asFunction()))
     }
 
-    private fun assertNeighboursCountOn_5_5(expectedNeighboursCount: Int, world: F) {
-        assertEquals(expectedNeighboursCount, NEIGHBOURS_COUNT.call(world).call(5.asFunction()).call(5.asFunction()).asNumber())
+    private fun assertNeighboursCountOn_5_6(expectedNeighboursCount: Int, world: F) {
+        assertEquals(expectedNeighboursCount, NEIGHBOURS_COUNT.call(world).call(5.asFunction()).call(6.asFunction()).asNumber())
     }
 }
