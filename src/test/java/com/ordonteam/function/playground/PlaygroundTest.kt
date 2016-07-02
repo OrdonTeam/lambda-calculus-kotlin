@@ -30,6 +30,20 @@ class PlaygroundTest {
     val IS_ZERO = F { n -> n.call(FALSE).call(TRUE) }
     val ADD = F { a -> F { b -> F { f -> F { x -> b.call(f).call(a.call(f).call(x)) } } } }
     val MULTIPLY = F { a -> F { b -> F { f -> F { x -> b.call(F { xx -> a.call(f).call(xx) }).call(x) } } } }
+    val RECURSION_BUILDER = F { f -> F { a -> f.call(f).call(a) } }
+    val FACTORIAL = F { a ->
+        val FACTORIAL_TO_BUILD = F { self -> F { a -> F { acc -> IF.call(IS_ZERO.call(a)).call(identity).call(F { acc2 -> self.call(self).call(PREVIOUS.call(a)).call(MULTIPLY.call(a).call(acc2)) }).call(acc) } } }
+        val FACTORIAL_INTERNAL = RECURSION_BUILDER.call(FACTORIAL_TO_BUILD)
+        FACTORIAL_INTERNAL.call(a).call(ONE)
+    }
+
+    @Test
+    fun shouldCalculateFactorial() {
+        assertFunctionRepresent(1, FACTORIAL.call(ZERO))
+        assertFunctionRepresent(1, FACTORIAL.call(ONE))
+        assertFunctionRepresent(2, FACTORIAL.call(TWO))
+        assertFunctionRepresent(6, FACTORIAL.call(NEXT.call(TWO)))
+    }
 
     @Test
     fun shouldMultiply() {
