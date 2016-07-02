@@ -17,3 +17,5 @@ val MULTIPLY = F { a -> F { b -> F { f -> F { x -> b.call(F { xx -> a.call(f).ca
 val IS_ZERO = F { n -> n.call(F { x -> FALSE }).call(TRUE) }
 
 val SUB = F { a -> F { b -> F { f -> F { x -> b.call(PREVIOUS).call(a).call(f).call(x) } } } }
+
+val LEQ = F { a -> F { b -> IS_ZERO.call(SUB.call(a).call(b)) }}
