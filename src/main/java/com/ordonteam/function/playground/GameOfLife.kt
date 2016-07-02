@@ -49,7 +49,7 @@ val NEIGHBOURS_COUNT = F { world ->
         }
     }
 }
-val GAME_OF_LIFT_TICK = F { world ->
+val GAME_OF_LIFE_TICK = F { world ->
     F { x ->
         F { y ->
             val livingNeighbours = NEIGHBOURS_COUNT.call(world).call(x).call(y)

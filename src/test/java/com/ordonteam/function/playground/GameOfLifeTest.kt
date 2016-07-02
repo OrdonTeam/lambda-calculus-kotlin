@@ -8,21 +8,21 @@ class GameOfLifeTest {
     @Test
     fun shouldReturnEmptyWorld() {
         val world = worldOf()
-        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        val newWorld = GAME_OF_LIFE_TICK.call(world)
         newWorld.assertCellDead(5, 5)
     }
 
     @Test
     fun singleCellShouldDie() {
         val world = worldOf(5 to 5)
-        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        val newWorld = GAME_OF_LIFE_TICK.call(world)
         newWorld.assertCellDead(5, 5)
     }
 
     @Test
     fun cellShouldNotEmergeWithOnlyTwoFriends() {
         val world = worldOf(4 to 4, 4 to 5)
-        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        val newWorld = GAME_OF_LIFE_TICK.call(world)
         newWorld.assertCellDead(5, 5)
     }
 
@@ -42,14 +42,14 @@ class GameOfLifeTest {
     @Test
     fun groupOfFourCellShouldSurvive() {
         val world = worldOf(4 to 4, 4 to 5, 5 to 4, 5 to 5)
-        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        val newWorld = GAME_OF_LIFE_TICK.call(world)
         newWorld.assertCellAlive(5, 5)
     }
 
     @Test
     fun onceShouldDieWhenNotEnoughFriends() {
         val world = worldOf(4 to 4, 5 to 5)
-        val newWorld = GAME_OF_LIFT_TICK.call(world)
+        val newWorld = GAME_OF_LIFE_TICK.call(world)
         newWorld.assertCellDead(5, 5)
     }
 
