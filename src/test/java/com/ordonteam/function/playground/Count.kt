@@ -1,6 +1,7 @@
 package com.ordonteam.function.playground
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 
 data class Count(val count: Int) : F {
     override fun call(f: F) = throw RuntimeException()
@@ -17,7 +18,7 @@ class Counter : F {
 }
 
 fun assertFunctionRepresent(value: Int, number: F) {
-    assertEquals(Count(value), number.call(Counter()).call(Count(0)))
+    assertTrue(number.isNumber(value))
 }
 
 fun assertBehaveLikeTrue(hopefullyTrue: F) {
