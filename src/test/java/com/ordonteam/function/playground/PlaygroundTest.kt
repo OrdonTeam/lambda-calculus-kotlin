@@ -36,6 +36,15 @@ class PlaygroundTest {
         val FACTORIAL_INTERNAL = RECURSION_BUILDER.call(FACTORIAL_TO_BUILD)
         FACTORIAL_INTERNAL.call(a).call(ONE)
     }
+    val NAN = F { x -> TRUE }
+    val IS_NAN = F { p -> p.call(FALSE) }
+
+    @Test
+    fun shouldRepresentNotANumber() {
+        assertBehaveLikeTrue(IS_NAN.call(NAN))
+        assertBehaveLikeFalse(IS_NAN.call(ONE))
+        assertBehaveLikeFalse(IS_NAN.call(NEXT.call(ONE)))
+    }
 
     @Test
     fun shouldCalculateFactorial() {
@@ -43,6 +52,7 @@ class PlaygroundTest {
         assertFunctionRepresent(1, FACTORIAL.call(ONE))
         assertFunctionRepresent(2, FACTORIAL.call(TWO))
         assertFunctionRepresent(6, FACTORIAL.call(NEXT.call(TWO)))
+        assertFunctionRepresent(720, FACTORIAL.call(NEXT.call(NEXT.call(NEXT.call(NEXT.call(TWO))))))
     }
 
     @Test
