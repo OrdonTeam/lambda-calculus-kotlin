@@ -18,4 +18,6 @@ val IS_ZERO = F { n -> n.call(F { x -> FALSE }).call(TRUE) }
 
 val SUB = F { a -> F { b -> F { f -> F { x -> b.call(PREVIOUS).call(a).call(f).call(x) } } } }
 
-val LEQ = F { a -> F { b -> IS_ZERO.call(SUB.call(a).call(b)) }}
+val LEQ = F { a -> F { b -> IS_ZERO.call(SUB.call(a).call(b)) } }
+
+val EQ = F { a -> F { b -> AND.call(LEQ.call(a).call(b)).call(LEQ.call(b).call(a)) } }

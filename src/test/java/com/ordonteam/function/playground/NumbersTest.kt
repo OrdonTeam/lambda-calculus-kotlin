@@ -19,8 +19,9 @@ class NumbersTest {
     }
 
     @Test
-    @Ignore("To big")
     fun shouldCheckIfEqual() {
-
+        assertFalse(EQ.call(2.asFunction()).call(3.asFunction()).asBoolean())
+        assertTrue(EQ.call(3.asFunction()).call(3.asFunction()).asBoolean())
+        assertFalse(EQ.call(4.asFunction()).call(3.asFunction()).asBoolean())
     }
 }
