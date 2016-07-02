@@ -11,7 +11,13 @@ class GameOfLifeTest {
             F { y ->
                 val topLeft = IF.call(world.call(PREVIOUS.call(x)).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
                 val topMiddle = IF.call(world.call(PREVIOUS.call(x)).call(y)).call(ONE).call(ZERO)
-                ADD.call(topLeft).call(topMiddle)
+                val topRight = IF.call(world.call(PREVIOUS.call(x)).call(NEXT.call(y))).call(ONE).call(ZERO)
+                val middleLeft = IF.call(world.call(x).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
+                val middleRight = IF.call(world.call(x).call(NEXT.call(y))).call(ONE).call(ZERO)
+                val bottomLeft = IF.call(world.call(NEXT.call(x)).call(PREVIOUS.call(y))).call(ONE).call(ZERO)
+                val bottomMiddle = IF.call(world.call(NEXT.call(x)).call(y)).call(ONE).call(ZERO)
+                val bottomRight = IF.call(world.call(NEXT.call(x)).call(NEXT.call(y))).call(ONE).call(ZERO)
+                ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(ADD.call(topLeft).call(topMiddle)).call(topRight)).call(middleLeft)).call(middleRight)).call(bottomLeft)).call(bottomMiddle)).call(bottomRight)
             }
         }
     }
@@ -36,6 +42,12 @@ class GameOfLifeTest {
         assertNeighboursCountOn_5_6(0, worldOf())
         assertNeighboursCountOn_5_6(1, worldOf(4 to 5))
         assertNeighboursCountOn_5_6(1, worldOf(4 to 6))
+        assertNeighboursCountOn_5_6(1, worldOf(4 to 7))
+        assertNeighboursCountOn_5_6(1, worldOf(5 to 5))
+        assertNeighboursCountOn_5_6(1, worldOf(5 to 7))
+        assertNeighboursCountOn_5_6(1, worldOf(6 to 5))
+        assertNeighboursCountOn_5_6(1, worldOf(6 to 6))
+        assertNeighboursCountOn_5_6(1, worldOf(6 to 7))
     }
 
     @Test
